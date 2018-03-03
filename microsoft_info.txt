@@ -1,0 +1,2 @@
+faceapi region: westus
+faceapi key: a5999be9dd034999b6d0451131f5394c 
