@@ -42,7 +42,9 @@ def readUsers():
 def checkImage(img):
 	global lastvalid_img
 	message = {'statusCode': None, 'msg': ''}
-	if CF.person_group.lists() is not '[]':
+	if CF.person.lists('0') != []:
+		print('List')
+		print(CF.person.lists('0'))
 		img.seek(0)
 		faceId = CF.face.detect(img)
 		lenFaces = len(faceId)
