@@ -10,9 +10,8 @@ CF.BaseUrl.set(BASE_URL)
 
 person_groupid = '0'
 users = []
-userStorage = '/Users/LukeM/faceqr/userStorage.txt'
+userStorage = 'userStorage.txt'
 lastcreatedId = None
-persistance = False
 
 def resetGroup():
 	CF.person_group.delete(person_groupid)
@@ -39,17 +38,16 @@ def addLink(link, uid=None):
 				u.link = link
 
 def storeUsers():
-	if persistance is True:
-		with open(userStorage, 'w') as store:
-			store.write('{')
-			c = 0
-			for u in users:
-				store.write('\''+u.id+'\': \''+u.link+'\'')
-				if c < len(users)-1:
-					store.write(',')
-				c += 1
+	with open(userStorage, 'w') as store:
+		store.write('{')
+		c = 0
+		for u in users:
+			store.write('\''+u.id+'\': \''+u.link+'\'')
+			if c < len(users)-1:
+				store.write(',')
+			c += 1
 
-			store.write('}')
+		store.write('}')
 
 def readUsers():
 	with open(userStorage, 'r') as store:
@@ -72,6 +70,12 @@ def createUser(Name, img):
 			cUser = False
 		else:
 			faceId = faceId[0]['faceId']
+			CF.person_group.train(person_groupid)
+			while True:
+				if CF.person_group.get_status(person_groupid)['status'] == 'succeeded':
+					break
+				else:
+					sleep(.5)
 			idDat = CF.face.identify([faceId], person_group_id=person_groupid)
 			if len(idDat[0]['candidates']) == 0:
 				cUser = True
