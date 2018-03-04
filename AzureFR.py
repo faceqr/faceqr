@@ -91,7 +91,7 @@ def checkImage(img):
 		print(str(message))
 		return message
 
-def searchUsers(link, name=time(), img=None):
+def createUser(link, name=time(), img=None):
 		global lastvalid_img
 		if img is None:
 			img = lastvalid_img
@@ -107,7 +107,7 @@ def searchUsers(link, name=time(), img=None):
 		print(str(message))
 		return message
 
-def searchforUser(img):
+def searchUsers(img):
 	message = {'statusCode': None, 'msg': ''}
 	sleep(.1)
 	CF.person_group.train(person_groupid)

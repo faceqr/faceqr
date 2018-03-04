@@ -85,7 +85,7 @@ def lookup_lookupface():
     url="No url found"
 
     photo_data_file = request.files['filebrowser']
-    msg = searchforUser(photo_data_file)
+    msg = searchUsers(photo_data_file)
     if msg['statusCode'] is 1:
         error = True
         errormsg = msg['msg']
