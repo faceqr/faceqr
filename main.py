@@ -5,12 +5,10 @@ import tempfile
 
 app = Flask(__name__)
 
-index_content=""
-
 @app.route('/')
 @app.route('/index')
 def index_page():
-    return render_template('index.html', content=index_content)
+    return render_template('index.html')
 
 
 # test if an image is valid for registration
