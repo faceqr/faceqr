@@ -116,6 +116,8 @@
         // clear photoData
         photoData = null;
 
+        $("#photomessage").text("");
+
         photoTaken = false;
         usePhotoButton.disabled = true;
         captureButton.innerHTML = "Take photo"
@@ -135,6 +137,7 @@
         // https://stackoverflow.com/questions/34779799/upload-base64-image-with-ajax 
         var formData = new FormData();
         formData.append('photo',photoData);
+        $("#photomessage").text("Validating photo...");
 
         $.ajax({
             url: $SCRIPT_ROOT + '/_registration_testimage', 

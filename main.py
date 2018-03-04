@@ -77,6 +77,26 @@ def registration_registerface():
 def registration_page():
     return render_template('registration.html')
 
+# look up a face
+@app.route('/_lookup_lookupface', methods=['POST']) 
+def lookup_lookupface():
+    error=False
+    errormsg = "No error"
+    url="No url found"
+
+    photo_data_file = request.files['filebrowser']
+    msg = searchforUser(photo_data_file)
+    if msg['statusCode'] is 1:
+        error = True
+        errormsg = msg['msg']
+        url = ""
+    else:
+        error = False
+        errormsg = ""
+        url = msg['msg']
+
+    return jsonify(error=error,errormsg=errormsg,url=url)
+
 @app.route('/lookup')
 def lookup_page():
     return render_template('lookup.html')
