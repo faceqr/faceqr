@@ -10,6 +10,11 @@ app = Flask(__name__)
 def index_page():
     return render_template('index.html')
 
+#pull users from storage
+try:
+    readUsers()
+except FileNotFoundError:
+	pass
 
 # test if an image is valid for registration
 @app.route('/_registration_testimage', methods=['POST']) 
@@ -66,6 +71,7 @@ def registration_registerface():
                 error = False
                 #register the image
                 createUser(qr_url)
+                storeUsers()
         else:
             error = True
             errormsg = "Unknown error; please try again"
