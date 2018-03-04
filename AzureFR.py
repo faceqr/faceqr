@@ -59,6 +59,7 @@ def readUsers():
 def createUser(Name, img):
 	message = {'statusCode': None, 'msg': ''}
 	if CF.person_group.lists() is not '[]':
+		img.seek(0)
 		faceId = CF.face.detect(img)
 		lenFaces = len(faceId)
 		if lenFaces < 1:
@@ -74,7 +75,9 @@ def createUser(Name, img):
 				cUser = True
 			else:
 				cUser = False
+				message['msg'] += 'Face already in userbase... '
 	else:
+		img.seek(0)
 		faceId = CF.face.detect(img)
 		lenFaces = len(faceId)
 		if lenFaces < 1:
@@ -96,6 +99,7 @@ def createUser(Name, img):
 		message['msg'] += 'Success'
 		print(str(message))
 		personid = CF.person.create(person_groupid, Name)['personId']
+		img.seek(0)
 		CF.person.add_face(img,person_groupid, personid)
 		user(personid, Name)
 		lastcreatedId = personid
@@ -110,6 +114,7 @@ def searchforUser(img):
 			break
 		else:
 			sleep(.5)
+	img.seek(0)
 	faces = CF.face.detect(img)
 	lenFaces = len(faces)
 	if lenFaces > 1:
