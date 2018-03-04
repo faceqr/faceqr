@@ -1,5 +1,6 @@
 import cognitive_face as CF
 import ast
+from time import sleep
 
 KEY = 'a5999be9dd034999b6d0451131f5394c'  #Azure Subscription Key
 CF.Key.set(KEY)
@@ -10,7 +11,7 @@ CF.BaseUrl.set(BASE_URL)
 person_groupid = '0'
 users = []
 userStorage = '/Users/LukeM/faceqr_storage/storage.txt'
-lastcreatesdId = None
+lastcreatedId = None
 
 def resetGroup():
 	CF.person_group.delete(person_groupid)
@@ -25,6 +26,16 @@ class user():
 		self.name = name
 		self.link = 'None'
 		users.append(self)
+
+def addLink(link, uid=None):
+	if uid is not None:
+		for u in users:
+			if u.id == uid:
+				u.link = link
+	else:
+		for u in users:
+			if u.id == lastcreatedId:
+				u.link = link
 
 def storeUsers():
 	with open(userStorage, 'w') as store:
@@ -79,7 +90,7 @@ def createUser(Name, img):
 		message['statusCode'] = 1
 		message['msg'].append('Error')
 		print(str(message))
-		return str(message)
+		return message
 	else:
 		message['statusCode'] = 0
 		message['msg'].append('Success')
@@ -87,13 +98,19 @@ def createUser(Name, img):
 		personid = CF.person.create(person_groupid, Name)['personId']
 		CF.person.add_face(img,person_groupid, personid)
 		user(personid, Name)
-		lastcreatesdId = personid
-		return str(message)
+		lastcreatedId = personid
+		return message
 
 def searchforUser(img):
 	message = {'statusCode': None, 'msg': ''}
+	sleep(.1)
 	CF.person_group.train(person_groupid)
-	facees = CF.face.detect(img)
+	while True:
+		if CF.person_group.get_status(person_groupid)['status'] == 'succeeded':
+			break
+		else:
+			sleep(.5)
+	faces = CF.face.detect(img)
 	lenFaces = len(faces)
 	if lenFaces > 1:
 		message['statusCode'] = 1
@@ -112,19 +129,5 @@ def searchforUser(img):
 			for u in users:
 				if u.id == cId:
 					message['msg'].append(u.link)
-
+	print(message)
 	return message
-
-
-resetGroup()
-
-"""createUser('F_User', '/Users/LukeM/Desktop/FR_testimages/fuser.jpeg')
-createUser('Bob', '/Users/LukeM/Desktop/FR_testimages/jamesb_test1.jpeg')
-createUser('multi', '/Users/LukeM/Desktop/FR_testimages/test.jpg')
-createUser('noface', '/Users/LukeM/Desktop/FR_testimages/noface.jpeg')
-
-storeUsers()"""
-
-'''readUsers()
-print('Users: ')
-print(users)'''

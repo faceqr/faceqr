@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, render_template, request 
 import base64
+from AzureFR import *
+import time
 
 app = Flask(__name__)
 
@@ -24,8 +26,13 @@ def registration_testimage():
         prefix = "data:image/png;base64,"
         if photo_data_jblob[0:len(prefix)].lower() == prefix.lower():
             photo_data = base64.b64decode(photo_data_jblob[len(prefix):])
-            # TODO: see if this face pic is ok!
-            error = False
+            #see if this face pic is ok!
+            msg = createUser(str(time.time()), photo_data)
+            if msg['statusCode'] is 1:
+                error = True
+                errormsg = msg['msg']
+            else:
+                error = False
         else:
             error = True
             errormsg = "Unknown error; please try again"
@@ -49,7 +56,8 @@ def registration_registerface():
                 errormsg = "Please enter a url."
             else:
                 error = False
-                # TODO: register the image
+                #register the image
+                addLink(qr_url)
         else:
             error = True
             errormsg = "Unknown error; please try again"
