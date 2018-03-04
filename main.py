@@ -31,11 +31,6 @@ def registration_testimage():
             photo_data_file = tempfile.TemporaryFile()
             photo_data_file.write(photo_data) 
 
-
-            # TEST
-            #ftest = open('testimage.png','wb')
-            #ftest.write(photo_data)
-
             #see if this face pic is ok!
             photo_data_file.seek(0) 
             msg = createUser(str(time.time()), photo_data_file)

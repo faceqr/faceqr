@@ -12,6 +12,7 @@ person_groupid = '0'
 users = []
 userStorage = '/Users/LukeM/faceqr/userStorage.txt'
 lastcreatedId = None
+persistance = False
 
 def resetGroup():
 	CF.person_group.delete(person_groupid)
@@ -38,16 +39,17 @@ def addLink(link, uid=None):
 				u.link = link
 
 def storeUsers():
-	with open(userStorage, 'w') as store:
-		store.write('{')
-		c = 0
-		for u in users:
-			store.write('\''+u.id+'\': \''+u.link+'\'')
-			if c < len(users)-1:
-				store.write(',')
-			c += 1
+	if persistance is True:
+		with open(userStorage, 'w') as store:
+			store.write('{')
+			c = 0
+			for u in users:
+				store.write('\''+u.id+'\': \''+u.link+'\'')
+				if c < len(users)-1:
+					store.write(',')
+				c += 1
 
-		store.write('}')
+			store.write('}')
 
 def readUsers():
 	with open(userStorage, 'r') as store:
