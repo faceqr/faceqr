@@ -1,9 +1,27 @@
 <html>
     <head>
         <title>FaceQR lookup</title>
+        <meta charset='utf-8'>
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="-1"> 
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css" media="all">
+
+        <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+        <script type=text/javascript src="{{ url_for('static', filename='js/jquery.js') }}"></script> 
+        <script type=text/javascript src="{{ url_for('static', filename='js/upload_photo.js') }}"> </script>
     </head>
     <body>
         <h1>Look up a face!</h1>
+
+        <form id="upload-file" method="post" enctype="multipart/form-data"> 
+            <input type="file" id="browsebutton" name="filebrowser" size="40"> 
+        </form>
+
+        <div class="messagearea">
+            <br>
+            <span id="answerbox"></span>
+            <br>
+        </div>
     </body>
 </html> 
 
