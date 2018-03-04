@@ -3,6 +3,8 @@ FaceQR
 
 Imagine a world with no QR codes. Imagine a world where people have faces. FaceQR combines the best of those worlds - faces are now QR codes!
 
+![FaceQR People](https://raw.githubusercontent.com/faceqr/faceqr/master/faceqr_people.png)
+
 ## No more mountains of business cards!
 Are you tired of sorting through your business card collection? Can't remember whose card is whose? With FaceQR, just take a selfie with your business contacts and you'll have their website!
 
