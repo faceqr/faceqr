@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>FaceQR registration</title>
+        <meta charset='utf-8'>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" type="text/css" media="all">
+
+        <script type=text/javascript> $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};</script>
+        <script type=text/javascript src="{{ url_for('static', filename='js/jquery.js') }}"></script> 
+        <script type=text/javascript src="{{ url_for('static', filename='js/selfie_capture.js') }}"> </script>
+
+    </head>
+    <body>
+        <h1>Register your face!</h1>
+
+
+        <div class="picarea">
+            <video id="player" autoplay></video>
+            <canvas id="canvas" width=320 height=240></canvas> 
+            <br>
+            <button id="capture">Take photo</button>
+            <br>
+            <button id="use_photo" disabled=true>Use this photo</button>
+        </div>
+
+        <div class="messagearea">
+            <br>
+            <span id="photomessage"></span>
+            <br>
+        </div>
+
+        <div id="urlarea" style="display:none;">
+            <form>
+                URL:
+                <input type="text" name="qrurl"> </form> 
+            <br>
+            <button id="registerbutton">Register</button>
+        </div>
+
+    </body>
+</html> 
