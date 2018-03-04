@@ -10,7 +10,7 @@ CF.BaseUrl.set(BASE_URL)
 
 person_groupid = '0'
 users = []
-userStorage = '/Users/LukeM/faceqr_storage/storage.txt'
+userStorage = '/Users/LukeM/faceqr/userStorage.txt'
 lastcreatedId = None
 
 def resetGroup():
@@ -62,10 +62,10 @@ def createUser(Name, img):
 		faceId = CF.face.detect(img)
 		lenFaces = len(faceId)
 		if lenFaces < 1:
-			message['msg'].append('No face detected... ')
+			message['msg'] += 'No face detected... '
 			cUser = False
 		elif lenFaces > 1:
-			message['msg'].append('More than one face detected... ')
+			message['msg'] += 'More than one face detected... '
 			cUser = False
 		else:
 			faceId = faceId[0]['faceId']
@@ -78,22 +78,22 @@ def createUser(Name, img):
 		faceId = CF.face.detect(img)
 		lenFaces = len(faceId)
 		if lenFaces < 1:
-			message['msg'].append('No face detected... ')
+			message['msg'] += 'No face detected... '
 			cUser = False
 		elif lenFaces > 1:
-			message['msg'].append('More than one face detected... ')
+			message['msg'] += 'More than one face detected... '
 			cUser = False
 		else:
 			cUser = True
 
 	if cUser is False:
 		message['statusCode'] = 1
-		message['msg'].append('Error')
+		message['msg'] += 'Error'
 		print(str(message))
 		return message
 	else:
 		message['statusCode'] = 0
-		message['msg'].append('Success')
+		message['msg'] += 'Success'
 		print(str(message))
 		personid = CF.person.create(person_groupid, Name)['personId']
 		CF.person.add_face(img,person_groupid, personid)
@@ -114,20 +114,20 @@ def searchforUser(img):
 	lenFaces = len(faces)
 	if lenFaces > 1:
 		message['statusCode'] = 1
-		message['msg'].append('More than one face detected... ')
+		message['msg'] += 'More than one face detected... '
 	elif lenFaces < 1:
 		message['statusCode'] = 1
-		message['msg'].append('No face detected... ')
+		message['msg'] += 'No face detected... '
 	else:
 		faceId = faces[0]['faceId']
 		idDat = CF.face.identify([faceId], person_group_id=person_groupid)
 		if len(idDat[0]['candidates']) == 0:
-			message['msg'].append('No match found.')
+			message['msg'] += 'No match found.'
 			message['statusCode'] = 0
 		else:
 			cId = idDat[0]['candidates'][0]
 			for u in users:
 				if u.id == cId:
-					message['msg'].append(u.link)
+					message['msg'] += u.link
 	print(message)
 	return message
