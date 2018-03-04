@@ -138,6 +138,8 @@
         var formData = new FormData();
         formData.append('photo',photoData);
         $("#photomessage").text("Validating photo...");
+        usePhotoButton.disabled = true;
+        captureButton.disabled = true;
 
         $.ajax({
             url: $SCRIPT_ROOT + '/_registration_testimage', 
@@ -151,6 +153,8 @@
                 var errormsg = response.errormsg;
                 if (error) {
                     $("#photomessage").text(errormsg);
+                    usePhotoButton.disabled = true;
+                    captureButton.disabled = false;
                 } else {
                     // show url registration form
                     $("#photomessage").text("Nice picture!");
@@ -175,7 +179,8 @@
         var qrurl = urlBox.value;
 
         // clear message box
-        $("#photomessage").text("");
+        $("#photomessage").text("Registering...");
+        registerButton.disabled = true;
 
         // https://stackoverflow.com/questions/34779799/upload-base64-image-with-ajax 
         var formData = new FormData();
@@ -194,6 +199,7 @@
                 var errormsg = response.errormsg;
                 if (error) {
                     $("#photomessage").text(errormsg);
+                    registerButton.disabled = false;
                 } else {
                     registerButton.disabled = true;
                     $("#photomessage").text("Face registered!");
