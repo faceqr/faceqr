@@ -8,13 +8,15 @@ CF.BaseUrl.set(BASE_URL)
 
 person_groupid = '0'
 
-def resetGroup():
+def resetGroup(testUser=True):
 	CF.person_group.delete(person_groupid)
 	CF.person_group.create(person_groupid)
-	pid = CF.person.create(person_groupid, 'testUser')['personId']
-	CF.person.add_face('/Users/LukeM/Desktop/FR_testimages/jamesb_test1.jpeg', person_groupid, pid)
+	if testUser:
+		pid = CF.person.create(person_groupid, 'testUser')['personId']
+		CF.person.add_face('/Users/LukeM/Desktop/FR_testimages/jamesb_test1.jpeg', person_groupid, pid)
+		print('testUser created')
+	
 	CF.person_group.train(person_groupid)
 	print('Person Group '+str(person_groupid)+' Cleard')
-	print('testUser created')
 
-resetGroup()
+resetGroup(False)

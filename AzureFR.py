@@ -24,7 +24,6 @@ def storeUsers():
 	with open(userStorage, 'w') as store:
 		store.write('{')
 		c = 0
-		store.write('\'a449583e-3a6a-475c-8763-1bbd675ec433\': \'testuser.link\',') #store testuser data
 		for u in users:
 			store.write('\''+u.id+'\': \''+u.link+'\'')
 			if c < len(users)-1:
@@ -43,8 +42,7 @@ def readUsers():
 def checkImage(img):
 	global lastvalid_img
 	message = {'statusCode': None, 'msg': ''}
-	lists = CF.person.lists('0')
-	if str(lists) is not '[]':
+	if CF.person.lists('0') != []:
 		print('List')
 		print(CF.person.lists('0'))
 		img.seek(0)
