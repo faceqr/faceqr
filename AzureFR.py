@@ -1,6 +1,6 @@
 import cognitive_face as CF
 import ast
-from time import sleep
+from time import sleep, time
 
 KEY = 'a5999be9dd034999b6d0451131f5394c'  #Azure Subscription Key
 CF.Key.set(KEY)
@@ -11,31 +11,14 @@ CF.BaseUrl.set(BASE_URL)
 person_groupid = '0'
 users = []
 userStorage = 'userStorage.txt'
-lastcreatedId = None
-
-def resetGroup():
-	CF.person_group.delete(person_groupid)
-	CF.person_group.create(person_groupid)
-	pid = CF.person.create(person_groupid, 'testUser')['personId']
-	CF.person.add_face('/Users/LukeM/Desktop/FR_testimages/jamesb_test1.jpeg', person_groupid, pid)
-	CF.person_group.train(person_groupid)
+lastvalid_img = None
 
 class user():
-	def __init__(self, id, name):
+	def __init__(self, id, name, link):
 		self.id = id
 		self.name = name
-		self.link = 'None'
+		self.link = link
 		users.append(self)
-
-def addLink(link, uid=None):
-	if uid is not None:
-		for u in users:
-			if u.id == uid:
-				u.link = link
-	else:
-		for u in users:
-			if u.id == lastcreatedId:
-				u.link = link
 
 def storeUsers():
 	with open(userStorage, 'w') as store:
@@ -56,7 +39,8 @@ def readUsers():
 	for k in userDict.keys():
 		user(k, userDict[k])
 
-def createUser(Name, img):
+def checkImage(img):
+	global lastvalid_img
 	message = {'statusCode': None, 'msg': ''}
 	if CF.person_group.lists() is not '[]':
 		img.seek(0)
@@ -97,18 +81,30 @@ def createUser(Name, img):
 
 	if cUser is False:
 		message['statusCode'] = 1
-		message['msg'] += 'Error'
+		message['msg'] += 'Error.'
 		print(str(message))
 		return message
 	else:
 		message['statusCode'] = 0
-		message['msg'] += 'Success'
+		message['msg'] += 'Valid Image.'
+		lastvalid_img = img
 		print(str(message))
-		personid = CF.person.create(person_groupid, Name)['personId']
+		return message
+
+def searchUsers(link, name=time(), img=None):
+		global lastvalid_img
+		if img is None:
+			img = lastvalid_img
+		message = {'statusCode': None, 'msg': ''}
+		message['statusCode'] = 0
+		message['msg'] += 'Success... Created User.'
+		personid = CF.person.create(person_groupid, name)['personId']
+		print(img)
+		print(lastvalid_img)
 		img.seek(0)
 		CF.person.add_face(img,person_groupid, personid)
-		user(personid, Name)
-		lastcreatedId = personid
+		user(personid, name, link)
+		print(str(message))
 		return message
 
 def searchforUser(img):
