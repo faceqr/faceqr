@@ -21,6 +21,8 @@
     var photo = null;
     var captureButton = null;
     var usePhotoButton = null;
+    var registerButton = null;
+    var urlBox = null;
     var photoData = null;
 
     var photoTaken = false;
@@ -31,6 +33,8 @@
         context = canvas.getContext('2d');
         captureButton = document.getElementById('capture');
         usePhotoButton = document.getElementById('use_photo');
+        registerButton = document.getElementById('registerbutton');
+        urlBox = document.getElementById('qrurlbox');
         photo = document.getElementById('photo'); 
 
         usePhotoButton.disabled = true;
@@ -141,15 +145,19 @@
             data: formData,
             success: function (response){
                 var error = response.error;
+                var errormsg = response.errormsg;
                 if (error) {
-                    // handle error
-                    $("#photomessage").text("error: ...");
+                    $("#photomessage").text(errormsg);
                 } else {
                     // show url registration form
                     $("#photomessage").text("Nice picture!");
                     usePhotoButton.disabled = true;
                     captureButton.disabled = true;
                     document.getElementById('urlarea').style.display = "inline";
+                    registerButton.addEventListener('click', function(ev){
+                        registerphoto();
+                        ev.preventDefault();
+                    }, false); 
                 }
             }
         })
@@ -157,11 +165,41 @@
                 //alert('done');
             }); 
 
-        //$.getJSON($SCRIPT_ROOT + '/_registration_testimage', {
-        //photo_data: "photoData" // later remove quotes
-      //}, function(data) {
-        //$("#result").text(data.msg);
-      //});
+
+    }
+
+    function registerphoto() {
+        var qrurl = urlBox.value;
+
+        // clear message box
+        $("#photomessage").text("");
+
+        // https://stackoverflow.com/questions/34779799/upload-base64-image-with-ajax 
+        var formData = new FormData();
+        formData.append('photo',photoData);
+        formData.append('qrurl', qrurl);
+
+        $.ajax({
+            url: $SCRIPT_ROOT + '/_registration_registerface', 
+            type: "POST", 
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response){
+                var error = response.error;
+                var errormsg = response.errormsg;
+                if (error) {
+                    $("#photomessage").text(errormsg);
+                } else {
+                    registerButton.disabled = true;
+                    $("#photomessage").text("Face registered!");
+                }
+            }
+        })
+            .done(function(e){
+                //alert('done');
+            }); 
 
 
     }

@@ -11,31 +11,49 @@ def index_page():
     return render_template('index.html', content=index_content)
 
 
-# handle image data for registration
+# test if an image is valid for registration
 @app.route('/_registration_testimage', methods=['POST']) 
 def registration_testimage():
-    msg = "asdf"
     error=False
     errormsg = ""
     photo_data_jblob = request.form['photo']
     if (photo_data_jblob is None):
         error = True
+        errormsg = "Unknown error; please try again"
     else:
         prefix = "data:image/png;base64,"
         if photo_data_jblob[0:len(prefix)].lower() == prefix.lower():
             photo_data = base64.b64decode(photo_data_jblob[len(prefix):])
+            # TODO: see if this face pic is ok!
             error = False
         else:
             error = True
             errormsg = "Unknown error; please try again"
     return jsonify(error=error,errormsg=errormsg)
 
-# test ajax
-@app.route('/_add_numbers')
-def add_numbers():
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b) 
+# register a face
+@app.route('/_registration_registerface', methods=['POST']) 
+def registration_registerface():
+    error=False
+    errormsg = ""
+    photo_data_jblob = request.form['photo']
+    qr_url = request.form['qrurl']
+    if (photo_data_jblob is None):
+        error = True
+    else:
+        prefix = "data:image/png;base64,"
+        if photo_data_jblob[0:len(prefix)].lower() == prefix.lower():
+            photo_data = base64.b64decode(photo_data_jblob[len(prefix):])
+            if (qr_url is None) or (len(qr_url)==0):
+                error = True
+                errormsg = "Please enter a url."
+            else:
+                error = False
+                # TODO: register the image
+        else:
+            error = True
+            errormsg = "Unknown error; please try again"
+    return jsonify(error=error,errormsg=errormsg)
 
 @app.route('/registration')
 def registration_page():
