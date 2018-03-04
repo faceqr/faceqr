@@ -37,7 +37,7 @@ def readUsers():
 		userDict = store.readline()
 		userDict = ast.literal_eval(userDict)
 	for k in userDict.keys():
-		user(k, userDict[k])
+		user(k, time(), userDict[k])
 
 def checkImage(img):
 	global lastvalid_img
@@ -132,9 +132,15 @@ def searchUsers(img):
 			message['msg'] += 'No match found.'
 			message['statusCode'] = 0
 		else:
-			cId = idDat[0]['candidates'][0]
+			cId = idDat[0]['candidates'][0]['personId']
+			print(cId)
+			print('Users: ')
+			print(users)
 			for u in users:
+				print(u.id)
 				if u.id == cId:
+					print('M: '+u.id)
+					print('Match')
 					message['msg'] += u.link
 	print(message)
 	return message
