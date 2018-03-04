@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template, request
 import base64
 from AzureFR import *
 import time
+import tempfile
 
 app = Flask(__name__)
 
@@ -26,8 +27,18 @@ def registration_testimage():
         prefix = "data:image/png;base64,"
         if photo_data_jblob[0:len(prefix)].lower() == prefix.lower():
             photo_data = base64.b64decode(photo_data_jblob[len(prefix):])
+
+            photo_data_file = tempfile.TemporaryFile()
+            photo_data_file.write(photo_data) 
+
+
+            # TEST
+            #ftest = open('testimage.png','wb')
+            #ftest.write(photo_data)
+
             #see if this face pic is ok!
-            msg = createUser(str(time.time()), photo_data)
+            photo_data_file.seek(0) 
+            msg = createUser(str(time.time()), photo_data_file)
             if msg['statusCode'] is 1:
                 error = True
                 errormsg = msg['msg']
@@ -51,6 +62,11 @@ def registration_registerface():
         prefix = "data:image/png;base64,"
         if photo_data_jblob[0:len(prefix)].lower() == prefix.lower():
             photo_data = base64.b64decode(photo_data_jblob[len(prefix):])
+
+            photo_data_file = tempfile.TemporaryFile()
+            photo_data_file.write(photo_data) 
+            photo_data_file.seek(0)
+
             if (qr_url is None) or (len(qr_url)==0):
                 error = True
                 errormsg = "Please enter a url."
