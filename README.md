@@ -5,6 +5,9 @@ Imagine a world with no QR codes. Imagine a world where people have faces. FaceQ
 
 ![FaceQR People](https://raw.githubusercontent.com/faceqr/faceqr/master/faceqr_people.png)
 
+## No more social media QR codes!
+No need to set your Twitter profile picture to your Snapchat QR code; just use your face!
+
 ## No more mountains of business cards!
 Are you tired of sorting through your business card collection? Can't remember whose card is whose? With FaceQR, just take a selfie with your business contacts and you'll have their website!
 
