@@ -140,6 +140,7 @@
         $("#photomessage").text("Validating photo...");
         usePhotoButton.disabled = true;
         captureButton.disabled = true;
+        urlBox.value = ""
 
         $.ajax({
             url: $SCRIPT_ROOT + '/_registration_testimage', 
@@ -151,13 +152,20 @@
             success: function (response){
                 var error = response.error;
                 var errormsg = response.errormsg;
+                var existing_url = response.existing_url;
                 if (error) {
                     $("#photomessage").text(errormsg);
                     usePhotoButton.disabled = true;
                     captureButton.disabled = false;
                 } else {
                     // show url registration form
-                    $("#photomessage").text("Nice picture!");
+                    if (existing_url === "") {
+                        $("#photomessage").text("Nice picture!");
+                        urlBox.value = ""
+                    } else {
+                        $("#photomessage").text("Welcome back! You can update your URL below.");
+                        urlBox.value = existing_url;
+                    }
                     usePhotoButton.disabled = true;
                     captureButton.disabled = true;
                     document.getElementById('urlarea').style.display = "inline";

@@ -21,6 +21,7 @@ except FileNotFoundError:
 def registration_testimage():
     error=False
     errormsg = ""
+    existing_url = ""
     photo_data_jblob = request.form['photo']
     if (photo_data_jblob is None):
         error = True
@@ -39,12 +40,20 @@ def registration_testimage():
             if msg['statusCode'] is 1:
                 error = True
                 errormsg = msg['msg']
+
+                if "Face already in userbase" in errormsg:
+                    searchmsg = searchUsers(photo_data_file)
+                    if searchmsg['statusCode'] == 0:
+                        existing_url = searchmsg['msg']
+                        error = False
+                        errormsg = ""
             else:
+                # face pic is ok and not an existing user
                 error = False
         else:
             error = True
             errormsg = "Unknown error; please try again"
-    return jsonify(error=error,errormsg=errormsg)
+    return jsonify(error=error,errormsg=errormsg, existing_url=existing_url)
 
 # register a face
 @app.route('/_registration_registerface', methods=['POST']) 

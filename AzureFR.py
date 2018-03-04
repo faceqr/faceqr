@@ -67,6 +67,7 @@ def checkImage(img):
 				cUser = True
 			else:
 				cUser = False
+				lastvalid_img = img
 				message['msg'] += 'Face already in userbase... '
 	else:
 		img.seek(0)
@@ -110,7 +111,7 @@ def createUser(link, name=time(), img=None):
 		return message
 
 def searchUsers(img):
-	message = {'statusCode': None, 'msg': ''}
+	message = {'statusCode': 0, 'msg': ''}
 	sleep(.1)
 	CF.person_group.train(person_groupid)
 	while True:
